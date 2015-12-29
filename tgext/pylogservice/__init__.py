@@ -44,7 +44,8 @@ class SetupExtension(object):
         self.configurator.register_wrapper(echo_wrapper_factory)
 
     def on_startup(self):
+        print 'Application Running!'
         log.info('+ Application Running!')
 
 
-    
+from .logdbhandler import LogDBHandler    
