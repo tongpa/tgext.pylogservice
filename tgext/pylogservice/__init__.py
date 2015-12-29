@@ -44,8 +44,9 @@ class SetupExtension(object):
         self.configurator.register_wrapper(echo_wrapper_factory)
 
     def on_startup(self):
-        print 'Application Running!'
-        log.info('+ Application Running!')
+         
+        log.info('tgext.pylogservice + Application Running!')
 
 
-from .logdbhandler import LogDBHandler    
+from .logdbhandler import LogDBHandler   
+
