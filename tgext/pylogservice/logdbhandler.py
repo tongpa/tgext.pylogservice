@@ -4,9 +4,9 @@ from sqlalchemy import create_engine;
 from datetime import datetime;
 
 from tg.configuration import AppConfig, config
-
+from .models import LogSurvey, DeclarativeBase, init_model, DBSession
 import socket;
-
+from datetime import datetime, timedelta
 class LogDBHandler(logging.Handler):
     
     def __init__(self,  config,request):
@@ -17,6 +17,8 @@ class LogDBHandler(logging.Handler):
          
          
         self.engine = create_engine(self.sqlConfig);  
+        
+        init_model(self.engine)
         
         self.request =  request;
         self.ipserver = socket.gethostbyname(socket.gethostname());
@@ -80,7 +82,59 @@ class LogDBHandler(logging.Handler):
     def formatDBTime(self, record):
         record.dbtime = time.strftime("#%m/%d/%Y#", time.localtime(record.created))
 
-    def emit(self, record):
+    def emit(self,record):
+        try: 
+            #use default formatting
+            self.format(record)
+            #now set the database time up
+            self.formatDBTime(record)
+            if record.exc_info:
+                record.exc_text = logging._defaultFormatter.formatException(record.exc_info)
+            else:
+                record.exc_text = ""
+            
+            if(self.request and self.request.identity):
+                self.user =  self.request.identity['user'];
+            else:
+                self.user =  "GUEST";
+                
+            
+            if 'HTTP_X_FORWARDED_FOR' in self.request.environ :
+                self.ipclient = self.request.environ['HTTP_X_FORWARDED_FOR']; 
+            else:
+                self.ipclient = self.request.remote_addr;
+            
+            
+            
+            log = LogSurvey()
+            log.ip_server = str(self.ipserver) 
+            log.ip_client = str(self.ipclient)
+            
+            log.relative_created  = record.__dict__['relativeCreated'] #timedelta(seconds=record.__dict__['relativeCreated']) 
+            log.name = record.__dict__['name']
+            log.log_level = record.__dict__['levelno']
+            log.level_text = record.__dict__['levelname']
+            log.message = record.__dict__['msg']
+            log.file_name = record.__dict__['filename']
+            log.path_name = record.__dict__['pathname']
+            log.line_no = record.__dict__['lineno']
+            log.milliseconds = record.__dict__['msecs']#timedelta(seconds=record.__dict__['msecs'])  
+            log.exception = record.__dict__['exc_text']
+            log.thread = record.__dict__['thread']
+            
+            #log.current_page = record.__dict__[]
+            log.user_name = str(self.user)
+            #log.active  = record.__dict__[]
+            log.create_date = str(datetime.now())
+            
+            DBSession.add(log) 
+        except:
+            import traceback
+            ei = sys.exc_info()
+            traceback.print_exception(ei[0], ei[1], ei[2], None, sys.stderr)
+            del ei
+            
+    def emit_old(self, record):
         try:
             
             #use default formatting
@@ -134,3 +188,4 @@ class LogDBHandler(logging.Handler):
          
         logging.Handler.close(self)
         
+
