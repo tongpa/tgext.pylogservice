@@ -83,6 +83,8 @@ class LogDBHandler(logging.Handler):
         record.dbtime = time.strftime("#%m/%d/%Y#", time.localtime(record.created))
 
     def emit(self,record):
+       
+         
         try: 
             #use default formatting
             self.format(record)
@@ -93,10 +95,14 @@ class LogDBHandler(logging.Handler):
             else:
                 record.exc_text = ""
             
-            if(self.request and self.request.identity):
+            print self.request
+            
+            self.user =  "GUEST";
+            
+            if(self.request and self.request.identity is not None) : #and self.request.identity is not None
                 self.user =  self.request.identity['user'];
-            else:
-                self.user =  "GUEST";
+            
+                
                 
             
             if 'HTTP_X_FORWARDED_FOR' in self.request.environ :
