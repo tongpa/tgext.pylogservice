@@ -120,7 +120,7 @@ class LogDBHandler(logging.Handler):
             log.name = record.__dict__['name']
             log.log_level = record.__dict__['levelno']
             log.level_text = record.__dict__['levelname']
-            log.message = record.__dict__['msg']
+            log.message = str(record.__dict__['msg'])
             log.file_name = record.__dict__['filename']
             log.path_name = record.__dict__['pathname']
             log.line_no = record.__dict__['lineno']
