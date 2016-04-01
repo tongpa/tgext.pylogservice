@@ -47,6 +47,7 @@ class SetupExtension(object):
          
         log.info('tgext.pylogservice + Application Running!')
 
+__all__ = ['plugme']
 
 from .logdbhandler import LogDBHandler   
 
