@@ -52,3 +52,7 @@ class LogSurvey(DeclarativeBase):
     def __repr__(self):
         return "<Log: %s - %s>" % (self.create_date.strftime('%m/%d/%Y-%H:%M:%S'), self.message[:50])
     
+    def save(self):
+        DBSession.add(self) 
+        DBSession.flush()
+    

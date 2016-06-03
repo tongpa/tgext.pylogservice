@@ -7,6 +7,7 @@ from tg.configuration import AppConfig, config
 from .models import LogSurvey, DeclarativeBase, init_model, DBSession
 import socket;
 from datetime import datetime, timedelta
+
 class LogDBHandler(logging.Handler):
     
     def __init__(self,  config,request):
@@ -95,7 +96,7 @@ class LogDBHandler(logging.Handler):
             else:
                 record.exc_text = ""
             
-            print self.request
+            #print self.request
             
             self.user =  "GUEST";
             
@@ -132,13 +133,21 @@ class LogDBHandler(logging.Handler):
             log.user_name = str(self.user)
             #log.active  = record.__dict__[]
             log.create_date = str(datetime.now())
-            
-            DBSession.add(log) 
+            print "==================== Add log db (%s)============================="  %(datetime.now())
+            print "%s" %(DBSession.is_active)
+            if(DBSession.is_active):
+                log.save()
+            #DBSession.add(log) 
+            #DBSession.close()
         except:
             import traceback
             ei = sys.exc_info()
             traceback.print_exception(ei[0], ei[1], ei[2], None, sys.stderr)
             del ei
+            print "==================== Exception Add log db (%s)==========================" %(str(self.user))
+        finally:
+            
+            pass
             
     def emit_old(self, record):
         try:
