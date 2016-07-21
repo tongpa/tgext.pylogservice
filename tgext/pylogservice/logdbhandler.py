@@ -96,7 +96,7 @@ class LogDBHandler(logging.Handler):
             else:
                 record.exc_text = ""
             
-            #print self.request
+            #print "request:  %s" %(self.request)
             
             self.user =  "GUEST";
             
