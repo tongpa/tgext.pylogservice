@@ -23,7 +23,7 @@ class LogDBHandler(logging.Handler):
         
         self.request =  request;
         self.ipserver = socket.gethostbyname(socket.gethostname());
-        
+        self.user =  "GUEST"
          
          
     
@@ -82,7 +82,24 @@ class LogDBHandler(logging.Handler):
     
     def formatDBTime(self, record):
         record.dbtime = time.strftime("#%m/%d/%Y#", time.localtime(record.created))
-
+    
+    def checkUser(self):
+        try : 
+            if(self.request and self.request.identity is not None) : #and self.request.identity is not None
+                self.user =  self.request.identity['user'];
+        except:
+            self.user = "GUEST"
+    
+    def checkIPUser(self):
+        try:
+            if 'HTTP_X_FORWARDED_FOR' in self.request.environ :
+                self.ipclient = self.request.environ['HTTP_X_FORWARDED_FOR']; 
+            else:
+                self.ipclient = self.request.remote_addr;
+        except:
+            #self.ipclient = self.request.remote_addr;
+            self.ipclient = socket.gethostbyname(socket.gethostname());
+           
     def emit(self,record):
        
          
@@ -96,22 +113,9 @@ class LogDBHandler(logging.Handler):
             else:
                 record.exc_text = ""
             
-            #print "request:  %s" %(self.request)
             
-            self.user =  "GUEST";
-            
-            if(self.request and self.request.identity is not None) : #and self.request.identity is not None
-                self.user =  self.request.identity['user'];
-            
-                
-                
-            
-            if 'HTTP_X_FORWARDED_FOR' in self.request.environ :
-                self.ipclient = self.request.environ['HTTP_X_FORWARDED_FOR']; 
-            else:
-                self.ipclient = self.request.remote_addr;
-            
-            
+            self.user = self.checkUser()
+            self.ipclient = self.checkIPUser()
             
             log = LogSurvey()
             log.ip_server = str(self.ipserver) 
@@ -133,8 +137,8 @@ class LogDBHandler(logging.Handler):
             log.user_name = str(self.user)
             #log.active  = record.__dict__[]
             log.create_date = str(datetime.now())
-            print "==================== Add log db (%s)============================="  %(datetime.now())
-            print "%s" %(DBSession.is_active)
+            #print "==================== Add log db (%s)============================="  %(datetime.now())
+            #print "%s" %(DBSession.is_active)
             if(DBSession.is_active):
                 log.save()
             #DBSession.add(log) 
@@ -144,7 +148,7 @@ class LogDBHandler(logging.Handler):
             ei = sys.exc_info()
             traceback.print_exception(ei[0], ei[1], ei[2], None, sys.stderr)
             del ei
-            print "==================== Exception Add log db (%s)==========================" %(str(self.user))
+            #print "==================== Exception Add log db (%s)==========================" %(str(self.user))
         finally:
             
             pass
