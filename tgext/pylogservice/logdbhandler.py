@@ -10,23 +10,23 @@ from datetime import datetime, timedelta
 
 class LogDBHandler(logging.Handler):
     
-    def __init__(self,  config,request):
+    def __init__(self, config, request, title=""):
         logging.Handler.__init__(self)
+        print "Init LogDBHandler"
+        #self.sqlConfig = config['sqlalchemy.url'];
+        #self.sqlConfig = 'mysql://logfile:logfile1234@localhost:3306/pollandsurvey?charset=utf8&use_unicode=0'
         
+        engine = config['tg.app_globals'].sa_engine
+        init_model(engine)
+        #model.metadata.create_all(engine)
         
-        self.sqlConfig = config['sqlalchemy.url'] ;
-         
-         
-        self.engine = create_engine(self.sqlConfig);  
-        
-        init_model(self.engine)
+        #self.engine = create_engine(self.sqlConfig);
+        #init_model(self.engine)
         
         self.request =  request;
         self.ipserver = socket.gethostbyname(socket.gethostname());
         self.user =  "GUEST"
-         
-         
-    
+        
     def __setSQL__(self):
         return  """ INSERT INTO sur_log_survey(ip_server, ip_client, relative_created, name, log_level, level_text,message, file_name,
                     path_name, line_no, milliseconds, exception, thread, user_name, current_page, create_date
@@ -100,8 +100,7 @@ class LogDBHandler(logging.Handler):
             #self.ipclient = self.request.remote_addr;
             self.ipclient = socket.gethostbyname(socket.gethostname());
            
-    def emit(self,record):
-       
+    def emit(self,record):       
          
         try: 
             #use default formatting
@@ -138,7 +137,7 @@ class LogDBHandler(logging.Handler):
             #log.active  = record.__dict__[]
             log.create_date = str(datetime.now())
             #print "==================== Add log db (%s)============================="  %(datetime.now())
-            #print "%s" %(DBSession.is_active)
+            print "Connection DB is active : %s" %(DBSession.is_active)
             if(DBSession.is_active):
                 log.save()
             #DBSession.add(log) 

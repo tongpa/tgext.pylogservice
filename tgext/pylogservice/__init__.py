@@ -50,5 +50,4 @@ class SetupExtension(object):
 
 __all__ = ['plugme']
 
-from .logdbhandler import LogDBHandler   
-
+from .logdbhandler import LogDBHandler

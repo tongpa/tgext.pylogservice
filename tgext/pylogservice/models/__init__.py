@@ -17,6 +17,5 @@ def init_model(engine1 ):
     """Call me before using any of the tables or classes in the model."""
     DBSession.configure(bind=engine1)
     metadata.bind = engine1
-    
 
 from .logsurvey import LogSurvey
