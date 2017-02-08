@@ -17,9 +17,16 @@ def plugme(configurator, options=None):
     log.info('Setting up tgext.pylogservice extension...')
     milestones.config_ready.register(SetupExtension(configurator))
 
+    
     # This is required to be compatible with the
     # tgext.pluggable interface
     return dict(appid='tgext.pylogservice')
+
+
+    
+    
+     
+
 
 
 # Most of your extension initialization should probably happen here,
