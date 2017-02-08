@@ -99,10 +99,13 @@ class LogDBHandler(logging.Handler):
         except:
             #self.ipclient = self.request.remote_addr;
             self.ipclient = socket.gethostbyname(socket.gethostname());
-           
+    
+    #overide
     def emit(self,record):       
          
         try: 
+            
+            
             #use default formatting
             self.format(record)
             #now set the database time up
@@ -113,12 +116,12 @@ class LogDBHandler(logging.Handler):
                 record.exc_text = ""
             
             
-            self.user = self.checkUser()
-            self.ipclient = self.checkIPUser()
+            #self.user = self.checkUser()
+            #self.ipclient = self.checkIPUser()
             
             log = LogSurvey()
             log.ip_server = str(self.ipserver) 
-            log.ip_client = str(self.ipclient)
+            log.ip_client = record.__dict__['clientip'] #str(self.ipclient)
             
             log.relative_created  = record.__dict__['relativeCreated'] #timedelta(seconds=record.__dict__['relativeCreated']) 
             log.name = record.__dict__['name']
@@ -132,12 +135,14 @@ class LogDBHandler(logging.Handler):
             log.exception = record.__dict__['exc_text']
             log.thread = record.__dict__['thread']
             
+
             #log.current_page = record.__dict__[]
-            log.user_name = str(self.user)
+            log.user_name =  record.__dict__['user'] #str(self.user)
             #log.active  = record.__dict__[]
             log.create_date = str(datetime.now())
             #print "==================== Add log db (%s)============================="  %(datetime.now())
             print "Connection DB is active : %s" %(DBSession.is_active)
+            
             if(DBSession.is_active):
                 log.save()
             #DBSession.add(log) 
@@ -207,3 +212,5 @@ class LogDBHandler(logging.Handler):
         logging.Handler.close(self)
         
 
+
+    
