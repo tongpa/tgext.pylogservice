@@ -134,14 +134,15 @@ class LogDBHandler(logging.Handler):
             log.milliseconds = record.__dict__['msecs']#timedelta(seconds=record.__dict__['msecs'])  
             log.exception = record.__dict__['exc_text']
             log.thread = record.__dict__['thread']
+            log.modules = record.__dict__['modules']
             
 
             #log.current_page = record.__dict__[]
             log.user_name =  record.__dict__['user'] #str(self.user)
             #log.active  = record.__dict__[]
-            log.create_date = str(datetime.now())
+            #log.create_date = str(datetime.now())
             #print "==================== Add log db (%s)============================="  %(datetime.now())
-            print "Connection DB is active : %s" %(DBSession.is_active)
+            #print "Connection DB is active : %s" %(DBSession.is_active)
             
             if(DBSession.is_active):
                 log.save()

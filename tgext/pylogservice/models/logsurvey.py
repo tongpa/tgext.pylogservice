@@ -40,6 +40,8 @@ class LogSurvey(DeclarativeBase):
     user_name = Column(String(255), nullable=True);
     active  = Column(BIT, nullable=True, default=1);
     create_date = Column(DateTime, default=func.now());
+    
+    modules = Column(String(255), nullable=True);
     #update_date = Column(DateTime ,onupdate=sql.func.utc_timestamp());
     
     def __init__(self):
