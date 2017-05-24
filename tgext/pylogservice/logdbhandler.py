@@ -8,16 +8,32 @@ from .models import LogSurvey, DeclarativeBase, init_model, DBSession
 import socket;
 from datetime import datetime, timedelta
 
+configDB = False
+
 class LogDBHandler(logging.Handler):
     
     def __init__(self, config, request, title=""):
         logging.Handler.__init__(self)
-        print "Init LogDBHandler"
+        #print "Init LogDBHandler"
         #self.sqlConfig = config['sqlalchemy.url'];
         #self.sqlConfig = 'mysql://logfile:logfile1234@localhost:3306/pollandsurvey?charset=utf8&use_unicode=0'
         
-        engine = config['tg.app_globals'].sa_engine
-        init_model(engine)
+        self.use_config_globals = False
+        if self.use_config_globals:
+            engine = config['tg.app_globals'].sa_engine
+            init_model(engine)
+        else:
+            print "init config logDB"
+            global configDB
+            
+            if configDB == False:
+                self.sqlConfig = config['app_conf']['sqlalchemy.url']
+                #self.sqlConfig = config['app_conf']['logsqlalchemy.url']
+                self.engine = create_engine(self.sqlConfig);
+                init_model(self.engine)
+                configDB = True
+            print "configDB : %s" %configDB
+            
         #model.metadata.create_all(engine)
         
         #self.engine = create_engine(self.sqlConfig);
