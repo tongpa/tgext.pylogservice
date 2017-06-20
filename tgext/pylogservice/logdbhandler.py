@@ -23,7 +23,7 @@ class LogDBHandler(logging.Handler):
             engine = config['tg.app_globals'].sa_engine
             init_model(engine)
         else:
-            print "init config logDB"
+            #print "init config logDB"
             global configDB
             
             if configDB == False:
@@ -32,7 +32,7 @@ class LogDBHandler(logging.Handler):
                 self.engine = create_engine(self.sqlConfig);
                 init_model(self.engine)
                 configDB = True
-            print "configDB : %s" %configDB
+            #print "configDB : %s" %configDB
             
         #model.metadata.create_all(engine)
         
