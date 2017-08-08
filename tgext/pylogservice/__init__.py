@@ -58,3 +58,5 @@ class SetupExtension(object):
 __all__ = ['plugme']
 
 from .logdbhandler import LogDBHandler
+from .exception_decor import exception
+from .exception_logger import loggerFile

@@ -17,11 +17,11 @@ class LogDBHandler(logging.Handler):
         #print "Init LogDBHandler"
         #self.sqlConfig = config['sqlalchemy.url'];
         #self.sqlConfig = 'mysql://logfile:logfile1234@localhost:3306/pollandsurvey?charset=utf8&use_unicode=0'
-        
+        self.engine=None
         self.use_config_globals = False
         if self.use_config_globals:
-            engine = config['tg.app_globals'].sa_engine
-            init_model(engine)
+            self.engine = config['tg.app_globals'].sa_engine
+            init_model(self.engine)
         else:
             #print "init config logDB"
             global configDB
@@ -29,11 +29,17 @@ class LogDBHandler(logging.Handler):
             if configDB == False:
                 self.sqlConfig = config['app_conf']['sqlalchemy.url']
                 #self.sqlConfig = config['app_conf']['logsqlalchemy.url']
-                self.engine = create_engine(self.sqlConfig);
+                #self.sqlConfig = 'mysql://logfile:logfile1234@localhost:3306/pollandsurvey?charset=utf8&use_unicode=0'
+               
+                self.engine = create_engine(self.sqlConfig, echo=True);
                 init_model(self.engine)
                 configDB = True
             #print "configDB : %s" %configDB
-            
+        
+        from sqlalchemy.orm import sessionmaker
+        Session = sessionmaker()
+        Session.configure(bind=self.engine)
+        self.session = Session()
         #model.metadata.create_all(engine)
         
         #self.engine = create_engine(self.sqlConfig);
@@ -131,13 +137,13 @@ class LogDBHandler(logging.Handler):
             else:
                 record.exc_text = ""
             
-            
+            print record.__dict__['name']
             #self.user = self.checkUser()
             #self.ipclient = self.checkIPUser()
             
             log = LogSurvey()
             log.ip_server = str(self.ipserver) 
-            log.ip_client = record.__dict__['clientip'] #str(self.ipclient)
+            log.ip_client = record.__dict__.get('clientip', '')#record.__dict__['clientip'] #str(self.ipclient)
             
             log.relative_created  = record.__dict__['relativeCreated'] #timedelta(seconds=record.__dict__['relativeCreated']) 
             log.name = record.__dict__['name']
@@ -150,28 +156,34 @@ class LogDBHandler(logging.Handler):
             log.milliseconds = record.__dict__['msecs']#timedelta(seconds=record.__dict__['msecs'])  
             log.exception = record.__dict__['exc_text']
             log.thread = record.__dict__['thread']
-            log.modules = record.__dict__['modules']
+            log.modules = record.__dict__.get('modules', '')#record.__dict__['modules']
             
 
             #log.current_page = record.__dict__[]
-            log.user_name =  record.__dict__['user'] #str(self.user)
+            log.user_name =  record.__dict__.get('user', 'guest')#record.__dict__['user'] #str(self.user)
             #log.active  = record.__dict__[]
             #log.create_date = str(datetime.now())
             #print "==================== Add log db (%s)============================="  %(datetime.now())
             #print "Connection DB is active : %s" %(DBSession.is_active)
             
-            if(DBSession.is_active):
-                log.save()
+            self.session.add(log)
+            self.session.commit()
+            #used but comment
+            ##if(DBSession.is_active):
+            ##    log.save()
+            
             #DBSession.add(log) 
             #DBSession.close()
+            
+            #print "Connection DB is active : %s" %(DBSession.is_active)
         except:
             import traceback
             ei = sys.exc_info()
             traceback.print_exception(ei[0], ei[1], ei[2], None, sys.stderr)
             del ei
-            #print "==================== Exception Add log db (%s)==========================" %(str(self.user))
+            print "==================== Exception Add log db (%s)==========================" %(str(self.user))
         finally:
-            
+            print "finally"
             pass
             
     def emit_old(self, record):
