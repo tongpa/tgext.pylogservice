@@ -27,7 +27,7 @@ class LogDBHandler(logging.Handler):
             global configDB
             
             if configDB == False:
-                self.sqlConfig = config['app_conf']['sqlalchemy.url']
+                self.sqlConfig = config['app_conf']['sqlalchemy.url']# config['app_conf']['sqlalchemy.master.url'] #config['app_conf']['sqlalchemy.url']
                 #self.sqlConfig = config['app_conf']['logsqlalchemy.url']
                 #self.sqlConfig = 'mysql://logfile:logfile1234@localhost:3306/pollandsurvey?charset=utf8&use_unicode=0'
                

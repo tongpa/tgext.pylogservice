@@ -8,7 +8,7 @@ def create_logger():
     logger.setLevel(logging.INFO)
  
     # create the logging file handler
-    fh = logging.FileHandler(r"d:/temp/test2.log")
+    fh = logging.FileHandler(r"test2.log")
  
     fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     formatter = logging.Formatter(fmt)
