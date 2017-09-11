@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 def exception(logger,extraLog=None):
     """
     A decorator that wraps the passed in function and logs 

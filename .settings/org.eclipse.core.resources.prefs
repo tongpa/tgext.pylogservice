@@ -1,0 +1,8 @@
+eclipse.preferences.version=1
+encoding//tgext/__init__.py=utf-8
+encoding//tgext/pylogservice/__init__.py=utf-8
+encoding//tgext/pylogservice/exception_decor.py=utf-8
+encoding//tgext/pylogservice/exception_logger.py=utf-8
+encoding//tgext/pylogservice/logdbhandler.py=utf-8
+encoding//tgext/pylogservice/models/__init__.py=utf-8
+encoding//tgext/pylogservice/models/logsurvey.py=utf-8

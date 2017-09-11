@@ -3,7 +3,6 @@
 from sqlalchemy import  Column
 from sqlalchemy.types import   DateTime, Integer, String, Text
 from sqlalchemy.sql import func
-
 from sqlalchemy.dialects.mysql import BIT
 #from pollandsurvey.model import DeclarativeBase, metadata, DBSession
 from sqlalchemy.ext.declarative import declarative_base

@@ -4,7 +4,6 @@ from tg import hooks
 from tg.configuration import milestones
 import logging
 log = logging.getLogger('tgext.pylogservice')
-
 # This is the entry point of your extension, will be called
 # both when the user plugs the extension manually or through tgext.pluggable
 # What you write here has the same effect as writing it into app_cfg.py

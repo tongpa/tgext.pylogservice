@@ -8,6 +8,7 @@ import socket;
 from datetime import datetime, timedelta
 configDB = False
 
+
 class LogDBHandler(logging.Handler):
     
     def __init__(self, config, request, title=""):

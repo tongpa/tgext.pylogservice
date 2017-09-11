@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import logging 
+import logging
 def create_logger():
     """
     Creates a logging object and returns it
@@ -16,6 +16,5 @@ def create_logger():
  
     # add handler to logger object
     logger.addHandler(fh)
-    return logger
- 
+    return logger 
 loggerFile = create_logger()
