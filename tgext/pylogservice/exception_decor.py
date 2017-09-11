@@ -1,8 +1,8 @@
+# -*- coding: utf-8 -*-
 def exception(logger,extraLog=None):
     """
     A decorator that wraps the passed in function and logs 
-    exceptions should one occur
- 
+    exceptions should one occur 
     @param logger: The logging object
     """
     print logger

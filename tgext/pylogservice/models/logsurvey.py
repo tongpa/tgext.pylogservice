@@ -1,5 +1,4 @@
-
-
+# -*- coding: utf-8 -*-
 #from sqlalchemy.sql import func; 
 from sqlalchemy import  Column
 from sqlalchemy.types import   DateTime, Integer, String, Text
@@ -10,11 +9,6 @@ from sqlalchemy.dialects.mysql import BIT
 from sqlalchemy.ext.declarative import declarative_base
 from tgext.pylogservice.models import DeclarativeBase, metadata, DBSession
 __all__ = ['LogSurvey']
-
-
-
-
-
 
 class LogSurvey(DeclarativeBase):
     __tablename__ = 'sur_log_survey'

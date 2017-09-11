@@ -1,10 +1,9 @@
+# -*- coding: utf-8 -*-
 from tg import config
 from tg import hooks
 from tg.configuration import milestones
-
 import logging
 log = logging.getLogger('tgext.pylogservice')
-
 
 # This is the entry point of your extension, will be called
 # both when the user plugs the extension manually or through tgext.pluggable
@@ -21,13 +20,6 @@ def plugme(configurator, options=None):
     # This is required to be compatible with the
     # tgext.pluggable interface
     return dict(appid='tgext.pylogservice')
-
-
-    
-    
-     
-
-
 
 # Most of your extension initialization should probably happen here,
 # where it's granted that .ini configuration file has already been loaded
@@ -51,8 +43,7 @@ class SetupExtension(object):
         
         self.configurator.register_wrapper(echo_wrapper_factory)
 
-    def on_startup(self):
-         
+    def on_startup(self):         
         log.info('tgext.pylogservice + Application Running!')
 
 __all__ = ['plugme']

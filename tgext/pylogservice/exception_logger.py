@@ -1,5 +1,5 @@
-import logging
- 
+# -*- coding: utf-8 -*-
+import logging 
 def create_logger():
     """
     Creates a logging object and returns it
