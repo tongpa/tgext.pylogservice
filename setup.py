@@ -20,7 +20,7 @@ setup(
     author_email='',
     url='',
     license='MIT',
-    packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
+    packages=find_packages(exclude=['ez_setup']),
     namespace_packages = ['tgext'],
     include_package_data=True,
     zip_safe=False,
