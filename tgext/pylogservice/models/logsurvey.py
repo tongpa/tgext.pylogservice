@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #from sqlalchemy.sql import func; 
 from sqlalchemy import  Column
-from sqlalchemy.types import   DateTime, Integer, String, Text
+from sqlalchemy.types import   DateTime, Integer, String, Text, TIMESTAMP
 from sqlalchemy.sql import func
 from sqlalchemy.dialects.mysql import BIT
 #from pollandsurvey.model import DeclarativeBase, metadata, DBSession
@@ -32,13 +32,13 @@ class LogSurvey(DeclarativeBase):
     current_page = Column(String(255), nullable=True);
     user_name = Column(String(255), nullable=True);
     active  = Column(BIT, nullable=True, default=1);
-    create_date = Column(DateTime, default=func.now());
-    
+    #create_date = Column(DateTime, default=func.now());
+    create_date  = Column( TIMESTAMP(timezone=True), nullable=True ,default=func.utc_timestamp());
     modules = Column(String(255), nullable=True);
     #update_date = Column(DateTime ,onupdate=sql.func.utc_timestamp());
     
     def __init__(self):
-        self.active = 1;       
+        self.active = 1;     
         
      
     def __unicode__(self):
