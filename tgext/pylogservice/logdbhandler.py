@@ -33,7 +33,7 @@ class LogDBHandler(logging.Handler):
                 configDB = True
             #print "configDB : %s" %configDB
         from sqlalchemy.orm import sessionmaker
-        Session = sessionmaker()
+        Session = sessionmaker(autoflush=True)
         Session.configure(bind=self.engine)
         self.session = Session()
         #model.metadata.create_all(engine)
